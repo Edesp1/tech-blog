@@ -1,10 +1,9 @@
 const withAuth = (req, res, next) => {
   // If the user is not logged in, redirect the user to the login page
-  if (!req.session.loggedIn) {
-    res.redirect('/login');
+  if (req.session.loggedIn) {
+    next(); // User is logged in, proceed to the next middleware
   } else {
-    // If user is logged in call next
-    next();
+    res.redirect('/login'); // Redirect to login if not logged in
   }
 };
 

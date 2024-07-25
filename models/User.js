@@ -4,7 +4,7 @@ const sequelize = require('../config/connections');
 
 class User extends Model {
     checkPassword(loginPw) {
-        return bycrypt.compareSync(loginPw, this.password);
+        return bcrypt.compareSync(loginPw, this.password);
     }
 }
 
@@ -25,18 +25,21 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                length: [8],
+                len: {
+                    args: [8, 100], // Minimum length of 8 characters and a maximum of 100
+                    msg: "Password must be at least 8 characters long"
+                },
             },
         },
     },
     {
         hooks: {
             beforeCreate: async (newUserData) => {
-                newUserData.password = await bycrypt.hash(newUserData.password, 10);
+                newUserData.password = await bcrypt.hash(newUserData.password, 10);
                 return newUserData;
             },
             beforeUpdate: async (updatedUserData) => {
-                updatedUserData.password = await bycrypt.hash(updatedUserData.password, 10);
+                updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
                 return updatedUserData;s
             },
         },

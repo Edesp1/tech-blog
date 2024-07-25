@@ -4,22 +4,29 @@ const sequelize = require('../config/connections');
 const userdata =
 [
   {
-    "username": "Watermelon123",
-    "password": "password321"
+    username: "Watermelon123",
+    password: "password321"
   },
   {
-    "username": "Subwaylover2",
-    "password": "password213"
+    username: "Subwaylover2",
+    password: "password213"
   },
   {
-    "username": "",
-    "password": "password"
+    username: "grey",
+    password: "password123"
   }
 ];
 
-const seedUser = () => User.bulkCreate(userdata, {
-  individualHooks: true,
-  returning: true,
-});
+const seedUsers = async () => {
+  try {
+    await User.bulkCreate(userdata, {
+      individualHooks: true,
+      returning: true,
+    });
+    console.log('Users seeded successfully');
+  } catch (error) {
+    console.error('Failed to seed users:', error);
+  }
+};
 
-module.exports = seedUser;
+module.exports = seedUsers;

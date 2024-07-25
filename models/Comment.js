@@ -8,7 +8,7 @@ Comment.init(
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            porimarykey: true,
+            primaryKey: true,
             autoIncrement: true,
         },
         commentContent: {
@@ -30,7 +30,7 @@ Comment.init(
         },
         postId: {
             type: DataTypes.INTEGER,
-            refernces: {
+            references: {
                 model: 'post',
                 key: 'id',
             },
@@ -40,7 +40,7 @@ Comment.init(
         sequelize,
         timeStamps: false,
         freezeTableName: true,
-        udnerscored: true,
+        underscored: true,
         modelname: 'comment',
     }
 );

@@ -1,54 +1,59 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 
-router.post('/', async (req, res) => {
+// Signup route
+router.post('/signup', async (req, res) => {
   try {
+    console.log('Received signup request:', req.body);
+
     const newUser = await User.create({
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
     });
 
     req.session.save(() => {
-      req.session.userId = newUser.id;
+      req.session.user_id = newUser.id;
       req.session.username = newUser.username;
       req.session.loggedIn = true;
 
-      res.json(newUser);
+      console.log('New user created:', newUser);
+      res.status(200).json(newUser);
     });
   } catch (err) {
+    console.error('Error during signup:', err);
     res.status(500).json(err);
   }
 });
 
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({
-      where: {
-        username: req.body.username,
-      },
-    });
+    const userData = await User.findOne({ where: { username: req.body.username } });
 
-    if (!user) {
-      res.status(400).json({ message: 'No user account found!' });
+    if (!userData) {
+      console.log('No user found with that username');
+      res.status(400).json({ message: 'Incorrect username or password, please try again' });
       return;
     }
 
-    const validPassword = user.checkPassword(req.body.password);
+    const validPassword = await userData.checkPassword(req.body.password);
 
     if (!validPassword) {
-      res.status(400).json({ message: 'No user account found!' });
+      console.log('Invalid password');
+      res.status(400).json({ message: 'Incorrect username or password, please try again' });
       return;
     }
 
     req.session.save(() => {
-      req.session.userId = user.id;
-      req.session.username = user.username;
+      req.session.user_id = userData.id;
+      req.session.username = userData.username;
       req.session.loggedIn = true;
 
-      res.json({ user, message: 'You are now logged in!' });
+      console.log('User logged in:', userData);
+      res.json({ user: userData, message: 'You are now logged in!' });
     });
   } catch (err) {
-    res.status(400).json({ message: 'No user account found!' });
+    console.error('Login error:', err);  // Improved error logging
+    res.status(500).json({ message: 'Internal server error' });  // Return a more specific error message
   }
 });
 

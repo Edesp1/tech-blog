@@ -1,7 +1,19 @@
-<article class="post">
+<div id="posts-container"></div>
 
-    {{#each posts as |post| }}
-        {{> post-info post}}
-    {{/each}}
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const response = await fetch('/api/posts');
+        const posts = await response.json();
+        const postsContainer = document.getElementById('posts-container');
 
-</article>
+        posts.forEach(post => {
+            const postElement = document.createElement('div');
+            postElement.innerHTML = `
+                <h2>${post.postTitle}</h2>
+                <p>${post.postContent}</p>
+                <small>By: ${post.user.username}</small>
+            `;
+            postsContainer.appendChild(postElement);
+        });
+    });
+</script>

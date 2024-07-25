@@ -21,7 +21,7 @@ Post.init(
             allowNull: false,
             unique: true,
         },
-        dataCreated: {
+        dateCreated: {
             type: DataTypes.DATEONLY,
             allowNull: false,
             defaultValue: DataTypes.NOW,

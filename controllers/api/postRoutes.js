@@ -1,6 +1,23 @@
 const router = require('express').Router();
-const { Post } = require('../../models');
+const { Post, User } = require('../../models');
 const { apiAuth } = require('../../utils/auth');
+
+// Fetch all posts
+router.get('/', async (req, res) => {
+  try {
+    const postData = await Post.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+        },
+      ],
+    });
+    res.json(postData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 router.post('/', apiAuth, async (req, res) => {
   const body = req.body;
@@ -33,7 +50,7 @@ router.put('/:id', apiAuth, async (req, res) => {
 
 router.delete('/:id', apiAuth, async (req, res) => {
   try {
-    const [affectedRows] = Post.destroy({
+    const affectedRows = await Post.destroy({
       where: {
         id: req.params.id,
       },

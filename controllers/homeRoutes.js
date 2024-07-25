@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Post, Comment, User } = require('../models/');
-const { withGuard, withoutGuard } = require('../utils/authGuard');
+const { withAuth, withoutAuth } = require('../utils/auth');
 
 router.get('/', async (req, res) => {
   try {
@@ -41,7 +41,7 @@ router.get('/post/:id', async (req, res) => {
   }
 });
 
-router.get('/login', withoutGuard, (req, res) => {
+router.get('/login', withoutAuth, (req, res) => {
   try {
     res.render('login');
   } catch (err) {
@@ -49,7 +49,7 @@ router.get('/login', withoutGuard, (req, res) => {
   }
 });
 
-router.get('/signup', withoutGuard, (req, res) => {
+router.get('/signup', withoutAuth, (req, res) => {
   try {
     res.render('signup');
   } catch (err) {
