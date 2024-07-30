@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const router = require('express').Router();
 const { User } = require('../../models');
 
@@ -17,6 +18,7 @@ router.post('/signup', async (req, res) => {
       req.session.loggedIn = true;
 
       console.log('New user created:', newUser);
+      console.log('Session after signup:', req.session);
       res.status(200).json(newUser);
     });
   } catch (err) {
@@ -27,39 +29,29 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { username: req.body.username } });
+    const user = await User.findOne({ where: { username: req.body.username } });
 
-    if (!userData) {
-      console.log('No user found with that username');
-      res.status(400).json({ message: 'Incorrect username or password, please try again' });
-      return;
-    }
-
-    const validPassword = await userData.checkPassword(req.body.password);
-
-    if (!validPassword) {
-      console.log('Invalid password');
-      res.status(400).json({ message: 'Incorrect username or password, please try again' });
-      return;
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+      return res.status(400).json({ message: 'Incorrect username or password' });
     }
 
     req.session.save(() => {
-      req.session.user_id = userData.id;
-      req.session.username = userData.username;
+      req.session.user_id = user.id;
+      req.session.username = user.username;
       req.session.loggedIn = true;
 
-      console.log('User logged in:', userData);
-      res.json({ user: userData, message: 'You are now logged in!' });
+      res.json({ user, loggedIn: true });
     });
   } catch (err) {
-    console.error('Login error:', err);  // Improved error logging
-    res.status(500).json({ message: 'Internal server error' });  // Return a more specific error message
+    console.error(err);
+    res.status(500).json(err);
   }
 });
 
 router.post('/logout', (req, res) => {
   if (req.session.logged_in) {
     req.session.destroy(() => {
+      console.log('User logged out and session destroyed');
       res.status(204).end();
     });
   } else {

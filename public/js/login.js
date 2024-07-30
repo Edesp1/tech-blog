@@ -5,20 +5,26 @@ const loginFormHandler = async function (event) {
   const password = document.querySelector('#password-login').value.trim();
 
   if (username && password) {
-    const response = await fetch('/api/users/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' },
-    });
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-    console.log('Login response:', response);
+      console.log('Login response:', response);
 
-    if (response.ok) {
-      console.log('Login successful');
-      document.location.replace('/dashboard');
-    } else {
-      console.log('Login failed');
-      alert('Failed to log in.');
+      if (response.ok) {
+        console.log('Login successful');
+        document.location.replace('/dashboard'); // Redirect to dashboard or any other page
+      } else {
+        const result = await response.json();
+        console.log('Login failed:', result.message || result);
+        alert(result.message || 'Failed to log in.');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('Failed to log in due to an internal error.');
     }
   }
 };

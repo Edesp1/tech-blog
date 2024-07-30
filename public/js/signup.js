@@ -11,9 +11,13 @@ const signupFormHandler = async function (event) {
       headers: { 'Content-Type': 'application/json' },
     });
 
+    console.log('Signup response:', response);
+
     if (response.ok) {
+      console.log('Signup successful, redirecting to dashboard');
       document.location.replace('/dashboard'); // Redirect to dashboard after signup
     } else {
+      console.error('Signup failed:', await response.text());
       alert('Failed to sign up.');
     }
   }

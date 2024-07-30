@@ -4,6 +4,7 @@ const session = require('express-session');
 const exphbs = require('express-handlebars');
 const routes = require('./controllers');
 const helpers = require('./utils/helpers');
+require('dotenv').config();
 
 const sequelize = require('./config/connections');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -17,17 +18,15 @@ const hbs = exphbs.create({
   partialsDir: path.join(__dirname, 'views/partials'),
 });
 
-const sess = {
-  secret: 'Super secret secret',
-  cookie: {},
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  cookie: { maxAge: 86400000 },
   resave: false,
   saveUninitialized: true,
   store: new SequelizeStore({
     db: sequelize
   })
-};
-
-app.use(session(sess));
+}));
 
 // Informs express on which template engine to use
 app.engine('handlebars', hbs.engine);
@@ -37,6 +36,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Log the request URL for static files
+app.use((req, res, next) => {
+  console.log(`Request URL: ${req.url}`);
+  next();
+});
 
 app.use(routes);
 
