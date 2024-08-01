@@ -2,7 +2,6 @@ const router = require('express').Router();
 const { Post, User } = require('../../models');
 const { apiAuth } = require('../../utils/auth');
 
-// Fetch all posts
 router.get('/', async (req, res) => {
   try {
     const postData = await Post.findAll({
@@ -23,13 +22,23 @@ router.post('/', apiAuth, async (req, res) => {
   const body = req.body;
 
   try {
+    console.log('Creating a new post with data:', body);
     const newPost = await Post.create({ ...body, userId: req.session.user_id });
     res.json(newPost);
   } catch (err) {
+    console.error('Error creating post:', err);
     res.status(500).json(err);
   }
 });
 
+// This route should be at the root level, so it should be registered in homeRoutes
+// If intended to be accessed as /api/posts/new-post, make sure the path is correct
+router.get('/new-post', (req, res) => {
+  console.log('LoggedIn Status:', req.session.loggedIn);
+  res.render('newPost', { loggedIn: req.session.loggedIn });
+});
+
+// Update a post
 router.put('/:id', apiAuth, async (req, res) => {
   try {
     const [affectedRows] = await Post.update(req.body, {
@@ -39,15 +48,16 @@ router.put('/:id', apiAuth, async (req, res) => {
     });
 
     if (affectedRows > 0) {
-      res.status(200).end();
+      res.status(200).json({ message: 'Post updated successfully' });
     } else {
-      res.status(404).end();
+      res.status(404).json({ message: 'Post not found' });
     }
   } catch (err) {
     res.status(500).json(err);
   }
-});
+})
 
+// Delete a post
 router.delete('/:id', apiAuth, async (req, res) => {
   try {
     const affectedRows = await Post.destroy({
@@ -57,9 +67,9 @@ router.delete('/:id', apiAuth, async (req, res) => {
     });
 
     if (affectedRows > 0) {
-      res.status(200).end();
+      res.status(200).json({ message: 'Post deleted successfully' });
     } else {
-      res.status(404).end();
+      res.status(404).json({ message: 'Post not found' });
     }
   } catch (err) {
     res.status(500).json(err);

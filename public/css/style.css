@@ -177,21 +177,48 @@
   
   /* CARDS */
   .card {
-    margin: 0 0 20px 0;
-    border: 3px solid var(--dark);
-    border-radius: var(--border-radius);
-  }
-  
-  .card-header {
-    color: var(--primary);
-    background-color: var(--dark);
-    padding: 1%;
-    border-radius: calc(0.18rem - 1px) calc(0.18rem - 1px) 0 0;
-  }
-  
-  .card-body {
-    padding: 1%;
-  }
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin: 16px;
+    background-color: #fff;
+    transition: box-shadow 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+}
+
+.card-body {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Container for posts */
+#posts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
   
   /* FORM */
   .form-label,

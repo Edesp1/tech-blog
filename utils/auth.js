@@ -8,15 +8,14 @@ const withAuth = (req, res, next) => {
 };
 
 const apiAuth = (req, res, next) => {
-  if (!req.session.logged_in) {
-    res.status(403).json({ msg: 'you must login to perform this action' });
-  } else {
-    next();
+  if (!req.session.loggedIn) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
+  next();
 };
 
 const withoutAuth = (req, res, next) => {
-  if (!req.session.logged_in) {
+  if (!req.session.loggedIn) {
     next();
   } else {
     res.redirect('/');

@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
     const posts = postData.map((post) => post.get({ plain: true }));
 
-    res.render('home', { posts, loggedIn: req.session.logged_in });
+    res.render('home', { posts, loggedIn: req.session.loggedIn });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/post/:id', async (req, res) => {
   try {
     const postData = await Post.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       include: [
         User,
         {
@@ -32,7 +32,7 @@ router.get('/post/:id', async (req, res) => {
     if (postData) {
       const post = postData.get({ plain: true });
 
-      res.render('post', { post, loggedIn: req.session.logged_in });
+      res.render('post', { post, loggedIn: req.session.loggedIn });
     } else {
       res.status(404).end();
     }
@@ -55,6 +55,11 @@ router.get('/signup', withoutAuth, (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+
+// Add the new-post route here
+router.get('/new-post', withAuth, (req, res) => {
+  res.render('newPost', { loggedIn: req.session.loggedIn });
 });
 
 module.exports = router;

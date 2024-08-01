@@ -19,13 +19,10 @@ const hbs = exphbs.create({
 });
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 86400000 },
+  secret: 'your_secret_key',
   resave: false,
   saveUninitialized: true,
-  store: new SequelizeStore({
-    db: sequelize
-  })
+  cookie: { secure: false } // Set to true if using HTTPS
 }));
 
 // Informs express on which template engine to use
@@ -37,9 +34,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Log the request URL for static files
 app.use((req, res, next) => {
-  console.log(`Request URL: ${req.url}`);
+  console.log('Session:', req.session);
+  res.locals.loggedIn = req.session.loggedIn;
   next();
 });
 

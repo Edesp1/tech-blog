@@ -1,3 +1,7 @@
+{{#if loggedIn}}
+  <a href="/new-post" class="btn">Create New Post</a>
+{{/if}}
+
 <div id="posts-container"></div>
 
 <script>
@@ -8,10 +12,15 @@
 
         posts.forEach(post => {
             const postElement = document.createElement('div');
+            postElement.classList.add('card'); // Add card class for styling
             postElement.innerHTML = `
-                <h2>${post.postTitle}</h2>
-                <p>${post.postContent}</p>
-                <small>By: ${post.user.username}</small>
+                <div class="card-header">
+                    <h2>${post.postTitle}</h2>
+                </div>
+                <div class="card-body">
+                    <p>${post.postContent}</p>
+                    <small>By: ${post.user.username}</small>
+                </div>
             `;
             postsContainer.appendChild(postElement);
         });

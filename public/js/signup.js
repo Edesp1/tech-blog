@@ -1,24 +1,30 @@
-const signupFormHandler = async function (event) {
+const loginFormHandler = async function (event) {
   event.preventDefault();
 
-  const username = document.querySelector('#username-signup').value.trim();
-  const password = document.querySelector('#password-signup').value.trim();
+  const username = document.querySelector('#username-login').value.trim();
+  const password = document.querySelector('#password-login').value.trim();
+
+  console.log('Login form submitted with:', { username, password });
 
   if (username && password) {
-    const response = await fetch('/api/users/signup', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' },
-    });
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-    console.log('Signup response:', response);
+      console.log('Login response status:', response.status);
+      console.log('Login response body:', await response.text());
 
-    if (response.ok) {
-      console.log('Signup successful, redirecting to dashboard');
-      document.location.replace('/dashboard'); // Redirect to dashboard after signup
-    } else {
-      console.error('Signup failed:', await response.text());
-      alert('Failed to sign up.');
+      if (response.ok) {
+        console.log('Login successful');
+        document.location.replace('/dashboard');
+      } else {
+        alert('Failed to log in.');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
     }
   }
 };
