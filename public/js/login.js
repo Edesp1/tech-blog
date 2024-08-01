@@ -12,18 +12,13 @@ const loginFormHandler = async function (event) {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      console.log('Login response:', response);
-
       if (response.ok) {
-        console.log('Login successful');
-        document.location.replace('/dashboard'); // Redirect to dashboard or any other page
+        document.location.replace('/dashboard'); // Redirect to dashboard
       } else {
         const result = await response.json();
-        console.log('Login failed:', result.message || result);
         alert(result.message || 'Failed to log in.');
       }
     } catch (error) {
-      console.error('Error during login:', error);
       alert('Failed to log in due to an internal error.');
     }
   }

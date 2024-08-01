@@ -6,11 +6,10 @@ const { withAuth } = require('../utils/auth');
 router.get('/', withAuth, async (req, res) => {
   try {
     const postData = await Post.findAll({
-      where:{"userId": req.session.userId},
+      where: {"userId": req.session.userId},
       include: [User],
     });
     const posts = postData.map((post) => post.get({ plain: true }));
-console.log(posts);
     res.render('allposts', {
       layout: 'dashboard',
       posts,
@@ -21,7 +20,7 @@ console.log(posts);
 });
 
 router.get('/new', withAuth, (req, res) => {
-  res.render('newpost', {
+  res.render('newPost', {
     layout: 'dashboard',
   });
 });
@@ -32,8 +31,7 @@ router.get('/edit/:id', withAuth, async (req, res) => {
 
     if (postData) {
       const post = postData.get({ plain: true });
-      console.log(post);
-      res.render('editpost', {
+      res.render('editPost', {
         layout: 'dashboard',
         post,
       });

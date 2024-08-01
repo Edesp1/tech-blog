@@ -1,5 +1,10 @@
+{{#each posts}}
 <div class="card">
     <div class="card-header">
-        <h4><a class="link" href="/dashboard/edit/{{id}}">{{title}}</a></h4>
+        <h4><a class="link" href="/dashboard/edit/{{id}}">{{postTitle}}</a></h4>
+    </div>
+    <div class="card-body">
+        <a href="/dashboard/edit/{{id}}" class="btn">Edit</a>
     </div>
 </div>
+{{/each}}

@@ -5,8 +5,6 @@ const { User } = require('../../models');
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    console.log('Received signup request:', req.body);
-
     const newUser = await User.create({
       username: req.body.username,
       password: req.body.password,
@@ -16,17 +14,14 @@ router.post('/signup', async (req, res) => {
       req.session.user_id = newUser.id;
       req.session.username = newUser.username;
       req.session.loggedIn = true;
-
-      console.log('New user created:', newUser);
-      console.log('Session after signup:', req.session);
       res.status(200).json(newUser);
     });
   } catch (err) {
-    console.error('Error during signup:', err);
     res.status(500).json(err);
   }
 });
 
+// Login route
 router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ where: { username: req.body.username } });
@@ -36,12 +31,12 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.save(() => {
-      req.session.user_id = user.id;
+      req.session.user_id = user.id; // Ensure user ID is stored in the session
       req.session.username = user.username;
       req.session.loggedIn = true;
 
       console.log('User logged in:', user);
-      console.log('Session after login:', req.session);
+      console.log('Session data:', req.session);
 
       res.json({ user, loggedIn: true });
     });
@@ -51,10 +46,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Logout route
 router.post('/logout', (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {
-      console.log('User logged out and session destroyed');
       res.status(204).end();
     });
   } else {

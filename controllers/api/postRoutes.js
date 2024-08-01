@@ -31,14 +31,11 @@ router.post('/', apiAuth, async (req, res) => {
   }
 });
 
-// This route should be at the root level, so it should be registered in homeRoutes
-// If intended to be accessed as /api/posts/new-post, make sure the path is correct
 router.get('/new-post', (req, res) => {
   console.log('LoggedIn Status:', req.session.loggedIn);
   res.render('newPost', { loggedIn: req.session.loggedIn });
 });
 
-// Update a post
 router.put('/:id', apiAuth, async (req, res) => {
   try {
     const [affectedRows] = await Post.update(req.body, {
@@ -55,9 +52,8 @@ router.put('/:id', apiAuth, async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
-// Delete a post
 router.delete('/:id', apiAuth, async (req, res) => {
   try {
     const affectedRows = await Post.destroy({

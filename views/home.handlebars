@@ -5,24 +5,31 @@
 <div id="posts-container"></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const response = await fetch('/api/posts');
-        const posts = await response.json();
-        const postsContainer = document.getElementById('posts-container');
+document.addEventListener('DOMContentLoaded', async () => {
+    const response = await fetch('/api/posts');
+    const posts = await response.json();
+    const postsContainer = document.getElementById('posts-container');
 
-        posts.forEach(post => {
-            const postElement = document.createElement('div');
-            postElement.classList.add('card'); // Add card class for styling
-            postElement.innerHTML = `
-                <div class="card-header">
-                    <h2>${post.postTitle}</h2>
-                </div>
-                <div class="card-body">
-                    <p>${post.postContent}</p>
-                    <small>By: ${post.user.username}</small>
-                </div>
-            `;
-            postsContainer.appendChild(postElement);
-        });
+    posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('card');
+        postElement.setAttribute('data-post-id', post.id); // Add data-post-id attribute
+        postElement.innerHTML = `
+            <div class="card-header">
+                <h2>${post.postTitle}</h2>
+            </div>
+            <div class="card-body">
+                <p>${post.postContent}</p>
+                <small>By: ${post.user.username}</small>
+                <a href="/dashboard/edit/${post.id}" class="btn">Edit Post</a>
+                <button class="btn delete-post-btn" data-id="${post.id}">Delete Post</button>
+            </div>
+        `;
+        postsContainer.appendChild(postElement);
     });
+
+    document.querySelectorAll('.delete-post-btn').forEach(button => {
+        button.addEventListener('click', deleteFormHandler);
+    });
+});
 </script>
