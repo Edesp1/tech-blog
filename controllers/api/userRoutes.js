@@ -1,4 +1,4 @@
-const bcrypt = require('../server').bcrypt;
+const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 const { User } = require('../../models');
 
@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.save(() => {
-      req.session.user_id = user.id; // Ensure user ID is stored in the session
+      req.session.user_id = user.id; 
       req.session.username = user.username;
       req.session.loggedIn = true;
 

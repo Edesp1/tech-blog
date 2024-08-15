@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('../server').bcrypt;
+const bcrypt = require('bcryptjs');
 const sequelize = require('../config/connections');
 
 class User extends Model {
@@ -26,7 +26,7 @@ User.init(
             allowNull: false,
             validate: {
                 len: {
-                    args: [8, 100], // Minimum length of 8 characters and a maximum of 100
+                    args: [8, 100], 
                     msg: "Password must be at least 8 characters long"
                 },
             },
@@ -40,7 +40,7 @@ User.init(
             },
             beforeUpdate: async (updatedUserData) => {
                 updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-                return updatedUserData;s
+                return updatedUserData;
             },
         },
         sequelize,
