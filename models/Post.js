@@ -19,7 +19,6 @@ Post.init(
         postContent: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
         },
         dateCreated: {
             type: DataTypes.DATEONLY,
