@@ -11,9 +11,10 @@
     "format": "prettier --write .",
     "dev": "nodemon server.js"
   },
-  "engines": {
-    "node": "20.13.1"
-  },
+"engines": {
+  "node": "20.13.1",
+  "npm": "10.8.1"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
