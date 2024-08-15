@@ -5,9 +5,10 @@ const { User } = require('../../models');
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10); // Hash the password
     const newUser = await User.create({
       username: req.body.username,
-      password: req.body.password,
+      password: hashedPassword,
     });
 
     req.session.save(() => {
@@ -31,7 +32,7 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.save(() => {
-      req.session.user_id = user.id; 
+      req.session.user_id = user.id;
       req.session.username = user.username;
       req.session.loggedIn = true;
 

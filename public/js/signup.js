@@ -1,30 +1,25 @@
-const loginFormHandler = async function (event) {
+const signupFormHandler = async function (event) {
   event.preventDefault();
 
-  const username = document.querySelector('#username-login').value.trim();
-  const password = document.querySelector('#password-login').value.trim();
-
-  console.log('Login form submitted with:', { username, password });
+  const username = document.querySelector('#username-signup').value.trim();
+  const password = document.querySelector('#password-signup').value.trim();
 
   if (username && password) {
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch('/api/users/signup', {
         method: 'POST',
         body: JSON.stringify({ username, password }),
         headers: { 'Content-Type': 'application/json' },
       });
 
-      console.log('Login response status:', response.status);
-      console.log('Login response body:', await response.text());
-
       if (response.ok) {
-        console.log('Login successful');
-        document.location.replace('/dashboard');
+        document.location.replace('/dashboard'); // Redirect to dashboard
       } else {
-        alert('Failed to log in.');
+        const result = await response.json();
+        alert(result.message || 'Failed to sign up.');
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      alert('Failed to sign up due to an internal error.');
     }
   }
 };
