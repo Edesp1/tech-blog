@@ -9,7 +9,7 @@
     "seed": "node seeds/seed.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "dev": "nodemon server.js",
+    "dev": "nodemon server.js"
   },
   "engines": {
     "node": "8.9.4"
