@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-// Create connection to our database using DATABASE_URL from Heroku
 const sequelize = new Sequelize(process.env.JAWSDB_URL, {
   dialect: 'mysql',
   logging: (msg) => {
@@ -10,3 +9,5 @@ const sequelize = new Sequelize(process.env.JAWSDB_URL, {
     }
   },
 });
+
+module.exports = sequelize;

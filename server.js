@@ -10,6 +10,18 @@ const bcrypt = require('bcryptjs');
 const sequelize = require('./config/connections');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connected successfully.');
+    // Start the server only if the database connection is successful
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
