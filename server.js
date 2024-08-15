@@ -14,9 +14,7 @@ sequelize.authenticate()
   .then(() => {
     console.log('Database connected successfully.');
     // Start the server only if the database connection is successful
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
+    app.listen(PORT, () => console.log(`Now listening on http://localhost:${PORT}`));
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
@@ -53,5 +51,5 @@ app.use((req, res, next) => {
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log(`Now listening on http://localhost:${PORT}`));
+  
 });
